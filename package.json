@@ -1,0 +1,12 @@
+{
+  "name": "nodejsrestapi",
+  "version": "1.0.0",
+  "description": "An introduction to building a Node REST API server",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon app.js"
+  },
+  "author": "Zak Warren",
+  "license": "ISC"
+}
