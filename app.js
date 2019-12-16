@@ -5,12 +5,14 @@ const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 
 const credentials = require('./credentials');
+const fileUpload = require('./middleware/file-upload');
 
 const feedRoutes = require('./routes/feed');
 
 const app = express();
 
 app.use(bodyParser.json());
+app.use(fileUpload.imageUpload);
 app.use('/images', express.static(path.join(__dirname, 'images')));
 
 app.use((req, res, next) => {

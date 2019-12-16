@@ -1,4 +1,4 @@
-const { validationResult } = require('express-validator/check');
+const { validationResult } = require('express-validator');
 
 const Post = require('../models/post');
 
@@ -25,13 +25,19 @@ exports.createPost = (req, res, next) => {
         error.statusCode = 422;
         throw error;
     }
+    if(!req.file) {
+        const error = new Error('No image provided');
+        error.statusCode = 422;
+        throw error;
+    }
 
     const title = req.body.title;
     const content = req.body.content;
+    const imageUrl = req.file.path.replace("\\" ,"/");
     const post = new Post({
         title: title,
         content: content,
-        imageUrl: 'images/fox.jpg',
+        imageUrl: imageUrl,
         creator: { name: 'Ace' }
     });
     post.save()
