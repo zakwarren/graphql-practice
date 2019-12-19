@@ -25,3 +25,10 @@ exports.checkSignup = [
         .not()
         .isEmpty()
 ];
+
+exports.checkStatus = [
+    body('status')
+        .trim()
+        .not()
+        .isEmpty()
+];
