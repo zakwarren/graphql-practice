@@ -60,7 +60,10 @@ exports.createPost = async (req, res, next) => {
 
         io.getIo().emit('posts', {
             action: 'create',
-            post: post
+            post: {
+                ...post._doc,
+                creator: { _id: req.userId, name: user.name }
+            }
         });
 
         res.status(201).json({
@@ -81,7 +84,7 @@ exports.createPost = async (req, res, next) => {
 
 exports.getPost = async (req, res, next) => {
     const postId = req.params.postId;
-    const post = await Post.findById(postId);
+    const post = await Post.findById(postId).populate('creator');
     try {
         if (!post) {
             const error = new Error('Could not find post');
