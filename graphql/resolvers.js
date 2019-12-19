@@ -5,6 +5,7 @@ const credentials = require('../credentials');
 const validation = require('./validation');
 
 const User = require('../models/user');
+const Post = require('../models/post');
 
 module.exports = {
     createUser: async function({ userInput }, req) {
@@ -55,6 +56,23 @@ module.exports = {
         return {
             token: token,
             userId: user._id.toString()
+        };
+    },
+    createPost: async function({ postInput }, req) {
+
+        validation.checkPost(postInput);
+
+        const post = new Post({
+            title: postInput.title,
+            content: postInput.content,
+            imageUrl: postInput.imageUrl
+        });
+        const createdPost = await post.save();
+        return {
+            ...createdPost,
+            _id: createdPost._id.toString(),
+            createdAt: createdPost.createdAt.toISOString(),
+            updatedAt: createdPost.updatedAt.toISOString()
         };
     }
 };

@@ -21,3 +21,25 @@ exports.checkSignup = userInput => {
         throw error;
     }
 };
+
+exports.checkPost = postInput => {
+    const errors = [];
+    if (
+        validator.isEmpty(postInput.title)
+        || !validator.isLength(postInput.title, { min: 5 })
+    ) {
+        errors.push({ message: 'Title is invalid' });
+    }
+    if (
+        validator.isEmpty(postInput.content)
+        || !validator.isLength(postInput.content, { min: 5 })
+    ) {
+        errors.push({ message: 'Content is invalid' });
+    }
+    if (errors.length > 0) {
+        const error = new Error('Invalid input');
+        error.data = errors;
+        error.code = 422;
+        throw error;
+    }
+};
