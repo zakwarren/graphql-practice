@@ -1,3 +1,5 @@
+const path = require('path');
+const fs = require('fs');
 const multer = require('multer');
 const uuidv4 = require('uuid/v4');
 
@@ -31,3 +33,8 @@ const upload = multer({
 });
 
 exports.imageUpload = upload.single('image');
+
+exports.clearImage = filePath => {
+    filePath = path.join(__dirname, '..', filePath);
+    fs.unlink(filePath, err => console.log(err));
+};
