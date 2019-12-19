@@ -7,8 +7,10 @@ const graphqlHttp = require('express-graphql');
 
 const credentials = require('./credentials');
 const fileUpload = require('./middleware/file-upload');
+
 const graphqlSchema = require('./graphql/schema');
 const graphqlResolver = require('./graphql/resolvers');
+const auth = require('./middleware/auth');
 
 const app = express();
 
@@ -29,13 +31,15 @@ app.use((req, res, next) => {
     next();
 });
 
+app.use(auth);
+
 app.use('/graphql', graphqlHttp({
     schema:graphqlSchema,
     rootValue: graphqlResolver,
     customFormatErrorFn: error => ({
         message: error.message || 'An error occurred',
         status: error.originalError.code || 500,
-        data: error.originalError.data
+        data: error.originalError.data || null
     }),
     graphiql: true
 }));
