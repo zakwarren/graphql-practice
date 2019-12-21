@@ -137,5 +137,38 @@ const Post = require('../models/post');
             createdAt: post.createdAt.toISOString(),
             updatedAt: post.updatedAt.toISOString()
         };
+    },
+    updatePost: async function({ id, postInput}, req) {
+        if (!req.isAuth) {
+            const error = new Error('Not authenticated');
+            error.code = 401;
+            throw error;
+        }
+        const post = await Post.findById(id).populate('creator', '_id name');
+        if (!post) {
+            const error = new Error('No post found');
+            error.code = 404;
+            throw error;
+        }
+        if (post.creator._id.toString() !== req.userId.toString()) {
+            const error = new Error('Not authorized');
+            error.code = 403;
+            throw error;
+        }
+
+        validation.checkPost(postInput);
+
+        post.title = postInput.title;
+        post.content = postInput.content;
+        if (postInput.imageUrl !== 'undefined') {
+            post.imageUrl = postInput.imageUrl;
+        }
+        const updatedPost = await post.save();
+        return {
+            ...updatedPost._doc,
+            _id: updatedPost._id.toString(),
+            createdAt: updatedPost.createdAt.toISOString(),
+            updatedAt: updatedPost.updatedAt.toISOString()
+        };
     }
 };
