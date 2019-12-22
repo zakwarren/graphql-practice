@@ -1,7 +1,6 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
-const credentials = require('../credentials');
 const validation = require('./validation');
 const fileUpload = require('../middleware/file-upload');
 
@@ -51,7 +50,7 @@ const Post = require('../models/post');
                 userId: user._id.toString(),
                 email: user.email
             },
-            credentials.PRIVATE_KEY,
+            process.env.PRIVATE_KEY,
             { expiresIn: '1h' }
         );
         return {

@@ -5,7 +5,6 @@ const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const graphqlHttp = require('express-graphql');
 
-const credentials = require('./credentials');
 const fileUpload = require('./middleware/file-upload');
 
 const graphqlSchema = require('./graphql/schema');
@@ -74,13 +73,13 @@ app.use((error, req, res, next) => {
 
 mongoose
     .connect(
-        credentials.CONNECTION_STRING,
+        process.env.MONGO_CONNECTION,
         {
             useNewUrlParser: true,
             useUnifiedTopology: true
         }
     )
     .then(() => {
-        app.listen(8080);
+        app.listen(process.env.PORT || 8080);
     })
     .catch(err => console.log(err));

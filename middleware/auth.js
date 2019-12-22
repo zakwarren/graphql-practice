@@ -1,7 +1,5 @@
 const jwt = require('jsonwebtoken');
 
-const credentials = require('../credentials');
-
 module.exports = (req, res, next) => {
     const authHeader = req.get('Authorization');
     if (!authHeader) {
@@ -12,7 +10,7 @@ module.exports = (req, res, next) => {
     const token =authHeader.split(' ')[1];
     let decodedToken;
     try {
-        decodedToken = jwt.verify(token, credentials.PRIVATE_KEY);
+        decodedToken = jwt.verify(token, process.env.PRIVATE_KEY);
     } catch (err) {
         req.isAuth = false;
         return next();
