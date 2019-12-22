@@ -4,6 +4,8 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const graphqlHttp = require('express-graphql');
+const helmet = require('helmet');
+const compression = require('compression');
 
 const fileUpload = require('./middleware/file-upload');
 
@@ -12,6 +14,9 @@ const graphqlResolver = require('./graphql/resolvers');
 const auth = require('./middleware/auth');
 
 const app = express();
+
+app.use(helmet());
+app.use(compression());
 
 app.use(bodyParser.json());
 app.use(fileUpload.imageUpload);
